@@ -81,6 +81,20 @@ st.markdown(
         box-shadow: 0 2px 16px rgba(0,0,0,0.18);
         border-radius: 10px;
     }
+    /* Make all Streamlit label, header, and caption text white */
+    .stSidebar h1, .stSidebar h2, .stSidebar h3, .stSidebar h4, .stSidebar h5, .stSidebar h6,
+    .stSidebar .stRadio label, .stSidebar .stSelectbox label, .stSidebar label,
+    .stSidebar .stMarkdown, .stSidebar .stTextInput label, .stSidebar .stTextArea label,
+    .stSidebar .stCaption, .stSidebar p, .stSidebar span,
+    label[data-testid="stSidebarLabel"],
+    .stRadio label, .stSelectbox label, .stTextInput label, .stTextArea label,
+    .stMarkdown label, .stCaption, p, span, label {
+        color: #FFF !important;
+    }
+    /* Also force white for all streamlit widget labels in main area */
+    label, .stRadio label, .stSelectbox label, .stTextInput label, .stTextArea label, .stCaption, .stMarkdown label, p, span {
+        color: #FFF !important;
+    }
     </style>
     <link href="https://fonts.googleapis.com/css?family=Inter:400,600,700&display=swap" rel="stylesheet">
     """,
@@ -91,7 +105,7 @@ st.markdown(
 logo_path = os.path.join(os.path.dirname(__file__), 'EV ChargeInsight logo.png')
 logo_col1, logo_col2 = st.columns([8, 1])
 with logo_col2:
-    st.image(logo_path, use_column_width=False, width=72, caption=None, output_format="auto")
+    st.image(logo_path, use_container_width=False, width=72, caption=None, output_format="auto")
 
 # Optional: add a little CSS to float the logo right and add shadow
 st.markdown(
