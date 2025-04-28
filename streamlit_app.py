@@ -144,7 +144,7 @@ else:
     st.error(f"Could not find {DATA_PATH}. Please ensure the file exists in the repository.")
     st.stop()
 
-    system_instruction = """
+system_instruction = """
 You are a data analyst and cleanup assistant for an EV charging station SmartDataframe chatbot.
 
 Your job includes two parts:
