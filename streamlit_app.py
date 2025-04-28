@@ -144,6 +144,24 @@ else:
     st.error(f"Could not find {DATA_PATH}. Please ensure the file exists in the repository.")
     st.stop()
 
+    system_instruction = """
+You are a data analyst and cleanup assistant for an EV charging station SmartDataframe chatbot.
+
+Your job includes two parts:
+1. Refine the user's question to be specific, concise, and suitable for querying a PandasAI SmartDataframe.
+2. Clean the LLM output by removing unnecessary logs, errors, warnings, tracebacks, and retries.
+
+Guidelines:
+- Only reference relevant columns: EV Vendor, city, state, rank, totalScore, reviewsCount, categoryName, address.
+- Avoid complex or restricted matplotlib functions like 'gca()', 'tight_layout()', etc.
+- Prefer simple aggregations like counts, averages, and basic bar/line plots.
+- If a table or chart is present, present it cleanly.
+- Never output raw error messages like: ERROR, WARNING, Traceback, Retry, ModuleNotFoundError.
+
+Return only the clean, corrected, final prompt ready for querying the SmartDataframe.
+Do NOT explain what you are doing. Just output the refined version.
+"""
+
 system_prompt = """
 You are a data assistant for an electric vehicle (EV) charging station dashboard.
 
@@ -170,7 +188,8 @@ Your job is to reduce token usage while delivering actionable insights.
 """
 
 llm = OpenAI(Model="GPT-4o")
-EV_SmartDF = SmartDataframe(EV_df, config={"llm": llm, "system_message": system_prompt})
+#EV_SmartDF = SmartDataframe(EV_df, config={"llm": llm, "system_message": system_prompt})
+EV_SmartDF = SmartDataframe(EV_df, config={"llm": llm, "system_message": system_instruction})
 
 def refine_prompt(user_prompt):
     client = OpenAI()
@@ -270,8 +289,9 @@ if st.button("Submit Query") and user_prompt:
     with st.spinner("Processing your query..."):
         refined = refine_prompt(user_prompt)
         st.info(f"Refined User Question: {refined}")  # Display the refined prompt in the Streamlit UI
-        response = EV_SmartDF.chat(refined)
-        final_response = clean_llm_output(response)
+        #response = EV_SmartDF.chat(refined)
+        final_response = EV_SmartDF.chat(refined)
+        #final_response = clean_llm_output(response)
     st.subheader("LLM Response:")
     st.write(final_response)
     # Try to display chart if present
